@@ -69,7 +69,7 @@ public class RSAEncrypt {
      * @throws Exception
      *             加密过程中的异常信息
      */
-    public static String encrypt( String str, String publicKey ) throws Exception{
+    public static String encrypt(String str, String publicKey ) throws Exception {
         //base64编码的公钥
         byte[] decoded = Base64.decode(publicKey);
         RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
@@ -91,7 +91,7 @@ public class RSAEncrypt {
      * @throws Exception
      *             解密过程中的异常信息
      */
-    public static String decrypt(String str, String privateKey) throws Exception{
+    public static String decrypt(String str, String privateKey) throws Exception {
         //64位解码加密后的字符串
         byte[] inputByte = Base64.decode(str);
         //base64编码的私钥

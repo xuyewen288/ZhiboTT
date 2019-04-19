@@ -154,6 +154,7 @@ public class OkHttpUtils {
         Type mType;
 
         public ResultCallback(){
+
             mType = getSuperclassTypeParameter(getClass());
         }
 

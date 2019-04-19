@@ -86,7 +86,7 @@ public class NetUtils {
      * @param bodyParams
      * @return
      */
-    public  Response postDataSynToNet(String url,Map<String,String> bodyParams) {
+    public  Response postDataSynToNet(String url, Map<String,String> bodyParams) {
         //1构造RequestBody
         RequestBody body=setRequestBody(bodyParams);
         //2 构造Request

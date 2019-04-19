@@ -38,7 +38,7 @@ public class HttpUtil {
 		}
 		if (buff != null) {
 			buff.delete(buff.lastIndexOf("&"), buff.length());
-			URL url = null;
+			java.net.URL url = null;
 			BufferedReader bufferReader = null;
 			HttpURLConnection urlConn = null;
 			try {
@@ -189,7 +189,7 @@ public class HttpUtil {
 		String result = ""; // 获取服务器返回数据
 		System.out.println("json========="+json);
 		if (json != null) {
-			URL url = null;
+			java.net.URL url = null;
 			BufferedReader bufferReader = null;
 			HttpURLConnection urlConn = null;
 			try {

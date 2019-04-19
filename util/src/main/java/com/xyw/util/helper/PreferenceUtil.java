@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 public class PreferenceUtil {
