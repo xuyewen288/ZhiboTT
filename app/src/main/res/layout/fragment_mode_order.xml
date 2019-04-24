@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@mipmap/background_0"
+    tools:context=".fragment.ModeOrderFragment">
+
+    <EditText
+        android:id="@+id/et_order"
+        android:gravity="center"
+        android:layout_margin="30dp"
+        android:hint="请输入口令"
+        android:textSize="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/bt_order_confirm"
+        android:layout_margin="30dp"
+        android:textSize="30dp"
+        android:text="确认口令"
+        android:background="@drawable/button_cicle_shape"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

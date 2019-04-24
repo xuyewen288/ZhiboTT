@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="addDevMode">
+        <item>分享码添加</item>
+        <item>搜索添加</item>
+    </string-array>
+</resources>

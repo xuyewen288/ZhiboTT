@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingTop="100dp"
+        android:paddingBottom="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/ssidEdt"
+            android:layout_alignParentTop="true"
+            android:spinnerMode="dropdown" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="textPersonName"
+            android:hint="请输入用户名"
+            android:ems="10"
+            android:layout_below="@id/ssidEdt"
+            android:id="@+id/accountEdt" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/pwdEdt"
+            android:layout_below="@id/accountEdt"
+            android:hint="请输入密码" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_margin="10dp"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="AP|Smart配置"
+                android:id="@+id/apOrSmartBtn"
+                android:background="@drawable/button_cicle_shape"
+                android:textColor="#fff"
+                android:layout_gravity="center_horizontal" />
+            <Button
+                android:layout_margin="10dp"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="二维码配置"
+                android:id="@+id/qrBtn"
+                android:background="@drawable/button_cicle_shape"
+                android:textColor="#fff"
+                android:layout_gravity="center_horizontal" />
+            <Button
+                android:layout_weight="1"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:text="QR"
+                android:id="@+id/qr2Btn"
+                android:background="@drawable/button_cicle_shape"
+                android:textColor="#fff"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+</FrameLayout>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <com.tencent.rtmp.ui.TXCloudVideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+
+        />
+
+    <LinearLayout
+        android:id="@+id/linearlayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/bt_txzb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开启腾讯云直播"
+        />
+
+    <Button
+        android:id="@+id/bt_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="切换前后摄像头"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_below="@id/linearlayout1"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_wifi_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="wifi账号"/>
+        <EditText
+            android:id="@+id/et_wifi_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="wifi密码"/>
+
+        <Button
+            android:id="@+id/bt_scan_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查找wifi"
+            />
+        <Button
+            android:id="@+id/bt_scan_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查找摄像头"
+            />
+    </LinearLayout>
+</RelativeLayout>
