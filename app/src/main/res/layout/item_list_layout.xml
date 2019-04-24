@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 <ImageView
     android:id="@+id/iv_thumbnail"
-    android:src="@drawable/ssdk_back_arr"
+    android:src="@drawable/loading2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
     <TextView

@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements WXLoginListener 
 //        weixinLogin();
 
         //测试数据
-        mEtUsername.setText("xyw");
+        mEtUsername.setText("xuyewen288");
         mEtPassword.setText("xyw");
         mEtPhone.setText("13631505030");
     }

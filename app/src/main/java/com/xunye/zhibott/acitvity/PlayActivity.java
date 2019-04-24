@@ -11,6 +11,7 @@ import com.iermu.opensdk.api.response.LiveMediaResponse;
 import com.xunye.zhibott.R;
 import com.xunye.zhibott.api.ServerApi;
 
+import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.widget.VideoView;
 
 public class PlayActivity extends AppCompatActivity {
@@ -29,8 +30,20 @@ public class PlayActivity extends AppCompatActivity {
         findViewById(R.id.bt_play).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("xyw","bt play");
+                Log.e("xyw","bt play==>"+url);
                 mVideoView.playLyyRTMPVideo(url);
+                mVideoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(IMediaPlayer iMediaPlayer) {
+                        Log.e("xyw","onPreparedy");
+                    }
+                });
+                mVideoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(IMediaPlayer iMediaPlayer) {
+                        Log.e("xyw","onCompletion");
+                    }
+                });
             }
         });
 //        new Thread(new Runnable() {

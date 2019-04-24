@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.iermu.opensdk.ErmuOpenSDK;
 import com.iermu.opensdk.api.ApiOkClient;
 import com.iermu.opensdk.api.response.CamMetaResponse;
@@ -39,6 +40,10 @@ import com.xunye.zhibott.acitvity.ViewActivity;
 import com.xunye.zhibott.api.ServerApi;
 import com.xunye.zhibott.helper.MessageEvent;
 import com.xunye.zhibott.helper.ViewHolder;
+import com.xyw.util.helper.HttpUtil;
+import com.xyw.util.helper.LogUtil;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -50,6 +55,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import okhttp3.Call;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -235,21 +242,48 @@ public class DevFragment extends BaseFragment {
     }
 
     private void apiDeviceList(){
-        threadPool.execute(new Runnable() {
+//        threadPool.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                String res= ServerApi.apiDeviceList(ErmuOpenSDK.newInstance().getAccessToken());
+//                Log.e("xyw","device list res="+res);
+//                try {
+//                    JSONObject jsonObject=new JSONObject(res);
+//                    adapter.setNumber(jsonObject.getInt("count"));
+//                    JSONArray jsonArray=jsonObject.getJSONArray("list");
+//                    Log.e("xyw","jsonArray="+jsonArray.toString());
+//                    adapter.setJsonArray(jsonArray);
+//                    EventBus.getDefault().post(new MessageEvent("updateDevice"));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+
+
+        OkHttpUtils.post().url(MyApplication.serverLiveUrl+"/v2/device/list")
+                .addParams("username",MyApplication.username).build().execute(new StringCallback() {
             @Override
-            public void run() {
-                String res= ServerApi.apiDeviceList(ErmuOpenSDK.newInstance().getAccessToken());
-                Log.e("xyw","device list res="+res);
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                LogUtil.e(response);
+                JSONArray jsonArray= null;
                 try {
-                    JSONObject jsonObject=new JSONObject(res);
-                    adapter.setNumber(jsonObject.getInt("count"));
-                    JSONArray jsonArray=jsonObject.getJSONArray("list");
-                    Log.e("xyw","jsonArray="+jsonArray.toString());
-                    adapter.setJsonArray(jsonArray);
-                    EventBus.getDefault().post(new MessageEvent("updateDevice"));
+                    jsonArray = new JSONArray(response);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                Log.e("xyw","jsonArray="+jsonArray.toString());
+                adapter.setNumber(jsonArray.length());
+                adapter.setJsonArray(jsonArray);
+
+                adapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+//                EventBus.getDefault().post(new MessageEvent("updateDevice"));
             }
         });
     }
@@ -300,12 +334,36 @@ public class DevFragment extends BaseFragment {
             if(null==convertView){
                 convertView=LayoutInflater.from(DevFragment.this.getContext()).inflate(R.layout.item_list_layout,parent,false);
             }
-            ImageView iv_thumbnail= ViewHolder.get(convertView,R.id.iv_thumbnail);
+            final ImageView iv_thumbnail= ViewHolder.get(convertView,R.id.iv_thumbnail);
             TextView tv_description=ViewHolder.get(convertView,R.id.tv_description);
+//            LogUtil.e("jsonArray==>"+jsonArray.toString());
             try {
-                JSONObject jsonObject=jsonArray.getJSONObject(position);
-                tv_description.setText(jsonObject.getString("description"));
-                Glide.with(DevFragment.this).load(jsonObject.getString("thumbnail")).into(iv_thumbnail);
+                final JSONObject jsonObject=jsonArray.getJSONObject(position);
+                LogUtil.e("jsonObject==>"+jsonObject.toString());
+                tv_description.setText(jsonObject.getString("descinfo"));
+                OkHttpUtils.post().url(MyApplication.serverLiveUrl+"/v2/device/info")
+                        .addParams("deviceid",jsonObject.getString("deviceid")).build().execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        try {
+                            JSONObject resjson=new JSONObject(response);
+                            LogUtil.e("response==>"+response);
+                            Glide.with(DevFragment.this).load(resjson.getString("thumbnail"))
+                                    .placeholder(R.drawable.loading2)
+                                    .transition(DrawableTransitionOptions.withCrossFade(300).crossFade())
+                                    .into(iv_thumbnail)
+                                    ;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
             } catch (JSONException e) {
                 e.printStackTrace();
             }
