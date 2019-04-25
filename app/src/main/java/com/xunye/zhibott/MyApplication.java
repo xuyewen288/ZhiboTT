@@ -3,6 +3,7 @@ package com.xunye.zhibott;
 import android.content.Context;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
 import com.iermu.opensdk.ErmuOpenSDK;
 import com.iermu.opensdk.api.ApiOkClient;
 import com.mob.MobApplication;
@@ -34,6 +35,14 @@ public class MyApplication extends MobApplication {
     public void onCreate() {
         super.onCreate();
         LogUtil.i("应用启动");
+        Glide.get(getApplicationContext()).clearMemory();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Glide.get(getApplicationContext()).clearDiskCache();
+            }
+        }).start();
+
         callable=new Callable<String>(){
 
             @Override

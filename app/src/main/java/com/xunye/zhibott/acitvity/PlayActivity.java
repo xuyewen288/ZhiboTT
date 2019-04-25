@@ -29,7 +29,7 @@ public class PlayActivity extends AppCompatActivity {
         findViewById(R.id.bt_play).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("xyw","bt play");
+                Log.e("xyw","bt play=>"+url);
                 mVideoView.playLyyRTMPVideo(url);
             }
         });

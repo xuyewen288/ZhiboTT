@@ -13,9 +13,14 @@ import android.widget.EditText;
 
 import com.xunye.zhibott.MyApplication;
 import com.xunye.zhibott.R;
+import com.xunye.zhibott.helper.MessageEvent;
 import com.xyw.util.helper.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import okhttp3.Call;
 
@@ -83,8 +88,9 @@ public class ModeOrderFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OkHttpUtils.post().url(MyApplication.serverLiveUrl+"/v2/device/getDeviceByShare")
+                OkHttpUtils.post().url(MyApplication.serverLiveUrl+"/device/getDeviceByShare")
                         .addParams("randomNum",editText.getText().toString().toUpperCase().trim())
+                        .addParams("username",MyApplication.username)
                         .build().execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
@@ -94,6 +100,16 @@ public class ModeOrderFragment extends Fragment {
                     @Override
                     public void onResponse(String response, int id) {
                         LogUtil.e("order res==>"+response);
+                        try {
+                            JSONObject jsonObject=new JSONObject(response);
+                            String deviceid=jsonObject.getString("deviceid");
+                            String thumbnail=jsonObject.getString("thumbnail");
+                            EventBus.getDefault().post(new MessageEvent(2,deviceid,thumbnail));
+                            getActivity().finish();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 });
             }
