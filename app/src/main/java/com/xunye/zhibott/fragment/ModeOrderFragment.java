@@ -2,12 +2,22 @@ package com.xunye.zhibott.fragment;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
+import com.xunye.zhibott.MyApplication;
 import com.xunye.zhibott.R;
+import com.xyw.util.helper.LogUtil;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import okhttp3.Call;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +33,8 @@ public class ModeOrderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private EditText editText;
+    private Button button;
 
 
     public ModeOrderFragment() {
@@ -61,6 +73,31 @@ public class ModeOrderFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_mode_order, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        editText=view.findViewById(R.id.et_order);
+        button=view.findViewById(R.id.bt_order_confirm);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OkHttpUtils.post().url(MyApplication.serverLiveUrl+"/v2/device/getDeviceByShare")
+                        .addParams("randomNum",editText.getText().toString().toUpperCase().trim())
+                        .build().execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        LogUtil.e("order res==>"+response);
+                    }
+                });
+            }
+        });
     }
 
 }

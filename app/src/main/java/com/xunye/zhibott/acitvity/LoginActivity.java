@@ -162,8 +162,8 @@ public class LoginActivity extends AppCompatActivity implements WXLoginListener 
         }
         params.put("phone", mEtPhone.getText().toString());
         LogUtil.i("登陆"+params.toString());
-        String url=MyApplication.serverSystemUrl+"/login/usershop";
-//        String url=MyApplication.serverSystemUrl+"/login/person";
+//        String url=MyApplication.serverSystemUrl+"/login/usershop";
+        String url=MyApplication.serverSystemUrl+"/login/person";
         OkHttpUtils.post().url(url).params(params).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
