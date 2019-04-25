@@ -261,7 +261,7 @@ public class DevFragment extends BaseFragment {
 //        });
 
 
-        OkHttpUtils.post().url(MyApplication.serverLiveUrl+"/v2/device/list")
+        OkHttpUtils.post().url(MyApplication.serverLiveUrl+"/device/list")
                 .addParams("username",MyApplication.username).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -341,7 +341,7 @@ public class DevFragment extends BaseFragment {
                 final JSONObject jsonObject=jsonArray.getJSONObject(position);
                 LogUtil.e("jsonObject==>"+jsonObject.toString());
                 tv_description.setText(jsonObject.getString("descinfo"));
-                OkHttpUtils.post().url(MyApplication.serverLiveUrl+"/v2/device/info")
+                OkHttpUtils.post().url(MyApplication.serverLiveUrl+"/device/info")
                         .addParams("deviceid",jsonObject.getString("deviceid")).build().execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
@@ -401,7 +401,7 @@ public class DevFragment extends BaseFragment {
 //                                params.put("access_token", accessToken);
                                 ApiOkClient okClient = new ApiOkClient(MyApplication.serverLiveUrl);
                                 ApiOkClient.Method method = ApiOkClient.Method.POST;
-                                String relativeUrl  = "/v2/device/liveplay";
+                                String relativeUrl  = "/device/liveplay";
                                 String res = okClient.execute(method, relativeUrl, params);
                                 response = LiveMediaResponse.parseResponse(deviceid, res);
 
