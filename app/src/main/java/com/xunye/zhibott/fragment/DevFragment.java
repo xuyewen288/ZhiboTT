@@ -1,16 +1,13 @@
 package com.xunye.zhibott.fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,17 +33,15 @@ import com.iermu.opensdk.setup.model.ScanStatus;
 import com.xunye.zhibott.MyApplication;
 import com.xunye.zhibott.R;
 import com.xunye.zhibott.acitvity.ModeChooseActivity;
+import com.xunye.zhibott.acitvity.PayActivity;
 import com.xunye.zhibott.acitvity.PlayActivity;
 import com.xunye.zhibott.acitvity.ViewActivity;
-import com.xunye.zhibott.api.ServerApi;
 import com.xunye.zhibott.helper.MessageEvent;
 import com.xunye.zhibott.helper.ViewHolder;
-import com.xyw.util.helper.HttpUtil;
 import com.xyw.util.helper.LogUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,7 +50,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import okhttp3.Call;
 
@@ -261,7 +255,7 @@ public class DevFragment extends BaseFragment {
 //            }
 //        });
 
-
+        Log.e("xyw","MyApplication.username="+MyApplication.username);
         OkHttpUtils.post().url(MyApplication.serverLiveUrl+"/device/person/list")
                 .addParams("username",MyApplication.username).build().execute(new StringCallback() {
             @Override
@@ -358,7 +352,7 @@ public class DevFragment extends BaseFragment {
                             JSONObject resjson=new JSONObject(response);
                             LogUtil.e("response==>"+response);
                             tv_description.setText(resjson.getString("description"));
-                            Glide.with(DevFragment.this).load(resjson.getString("thumbnail"))
+                            Glide.with(DevFragment.this.getActivity()).load(resjson.getString("thumbnail"))
                                     .placeholder(R.mipmap.loading2)
                                     .transition(DrawableTransitionOptions.withCrossFade(300).crossFade())
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -394,6 +388,10 @@ public class DevFragment extends BaseFragment {
             iv_thumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(MyApplication.watchtime<=0){
+                        startActivity(new Intent(getActivity(), PayActivity.class));
+                        return;
+                    }
                     threadPool.execute(new Runnable() {
                         @Override
                         public void run() {

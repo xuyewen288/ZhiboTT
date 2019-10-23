@@ -4,14 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +22,6 @@ import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mob.MobSDK;
 import com.mob.shop.OperationCallback;
 import com.mob.shop.ShopSDK;
 import com.mob.shop.datatype.PriceSort;
@@ -30,7 +29,6 @@ import com.mob.shop.datatype.SalesSort;
 import com.mob.shop.datatype.TimeSort;
 import com.mob.shop.datatype.builder.ProductQuerier;
 import com.mob.shop.datatype.entity.Label;
-import com.mob.shop.datatype.entity.Order;
 import com.mob.shop.datatype.entity.Product;
 import com.xunye.zhibott.R;
 import com.xunye.zhibott.acitvity.ModeChooseActivity;
@@ -50,10 +48,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.wechat.friends.Wechat;
 import okhttp3.Call;
 
 /**
@@ -188,7 +182,7 @@ public class ShopFragment extends BaseFragment {
             }
         });
 
-//        requestCategoryData();
+        requestCategoryData();
         mRefreshLaout.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override
             public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {

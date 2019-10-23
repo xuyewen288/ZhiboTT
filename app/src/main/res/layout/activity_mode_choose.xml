@@ -21,7 +21,6 @@
         android:layout_margin="20dp"
         android:background="@drawable/button_cicle_shape"
         android:text="添加新的摄像机"
-        android:visibility="gone"
         android:textColor="#ffffff"
         android:textSize="30dp" />
 

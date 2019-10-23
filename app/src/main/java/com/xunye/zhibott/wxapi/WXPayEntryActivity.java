@@ -12,11 +12,9 @@ import com.xunye.zhibott.helper.LogUtil;
 import com.xyw.util.wxapi.WXHelp;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 

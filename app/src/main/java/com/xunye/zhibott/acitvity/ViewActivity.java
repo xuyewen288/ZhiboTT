@@ -1,22 +1,17 @@
 package com.xunye.zhibott.acitvity;
 
-import android.content.Intent;
 import android.net.Uri;
-import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.iermu.opensdk.ErmuOpenSDK;
-import com.iermu.opensdk.OSLog;
-import com.iermu.opensdk.api.ApiOkClient;
 import com.xunye.zhibott.R;
 import com.xunye.zhibott.fragment.BaseFragment;
 import com.xunye.zhibott.fragment.DevFragment;
@@ -26,11 +21,7 @@ import com.xunye.zhibott.fragment.ScanDevFragment;
 import com.xunye.zhibott.fragment.ShopFragment;
 import com.xunye.zhibott.helper.PreferenceUtil;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -66,10 +57,10 @@ public class ViewActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager=findViewById(R.id.viewpager);
         mMyPagerAdapter=new MyPagerAdapter(getSupportFragmentManager());
         mMyPagerAdapter.addItem(DevFragment.newInstance("1","2"));
-        mMyPagerAdapter.addItem(ShopFragment.newInstance("1","2"));
-        mMyPagerAdapter.addItem(MineFragment.newInstance("1","2"));
+//        mMyPagerAdapter.addItem(ShopFragment.newInstance("1","2"));
+//        mMyPagerAdapter.addItem(MineFragment.newInstance("1","2"));
         mViewPager.setAdapter(mMyPagerAdapter);
-        mViewPager.setOffscreenPageLimit(2);
+//        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

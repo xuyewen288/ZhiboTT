@@ -1,9 +1,5 @@
 package com.xunye.zhibott.helper;
 
-import android.os.Handler;
-
-import com.xunye.zhibott.acitvity.PayActivity;
-
 import javax.crypto.Cipher;
 
 import java.lang.ref.WeakReference;

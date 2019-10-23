@@ -10,7 +10,7 @@
     <string name="phone">手机号</string>
     <string name="verifyCode">验证码</string>
     <string name="verifyget">获取</string>
-    <string name="login">登陆/注册</string>
+    <string name="login">登陆</string>
     <string name="register">注册</string>
 
     <string name="enter">这是SDK_Sample的入口界面</string>

@@ -1,52 +1,36 @@
 package com.xunye.zhibott.acitvity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alipay.sdk.app.PayTask;
-import com.iermu.opensdk.api.ApiOkClient;
-import com.tencent.mm.opensdk.constants.Build;
-import com.tencent.mm.opensdk.constants.ConstantsAPI;
-import com.tencent.mm.opensdk.modelbase.BaseReq;
-import com.tencent.mm.opensdk.modelbase.BaseResp;
-import com.tencent.mm.opensdk.modelpay.JumpToOfflinePay;
-import com.tencent.mm.opensdk.modelpay.PayReq;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.google.zxing.WriterException;
+import com.google.zxing.activity.CaptureActivity;
 import com.xunye.zhibott.MyApplication;
 import com.xunye.zhibott.R;
-import com.xunye.zhibott.helper.Utils;
+import com.xunye.zhibott.helper.QRImageHelper2;
 import com.xyw.util.alipay.AlipayHelp;
 import com.xyw.util.alipay.AlipayPayListener;
 import com.xyw.util.helper.LogUtil;
+import com.xyw.util.helper.OkHttpUtils;
 import com.xyw.util.wxapi.WXHelp;
 import com.xyw.util.wxapi.WXPayListener;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import okhttp3.Call;
-//import cn.smssdk.EventHandler;
-//import cn.smssdk.SMSSDK;
-//import cn.smssdk.gui.RegisterPage;
-//import cn.smssdk.gui.util.Const;
 
 public class PayActivity extends Activity implements WXPayListener, AlipayPayListener {
 
@@ -55,6 +39,15 @@ public class PayActivity extends Activity implements WXPayListener, AlipayPayLis
     private MyHandler myHandler;
 
     private AlipayHelp alipayHelp;
+
+    ImageView iv_saoma;
+
+    //打开扫描界面请求码
+    private int REQUEST_CODE = 0x01;
+    //扫描成功返回码
+    private int RESULT_OK = 0xA1;
+
+    private TextView tv_res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,16 +79,88 @@ public class PayActivity extends Activity implements WXPayListener, AlipayPayLis
                 }
             }
         });
+        iv_saoma= findViewById(R.id.iv_qrcode);
+        findViewById(R.id.bt_shoukuanma).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OkHttpUtils.get(MyApplication.serverSystemUrl + "/pay/weixin/saoma", new OkHttpUtils.ResultCallback<String>() {
+                    @Override
+                    public void onSuccess(String response) {
+                        LogUtil.e("saoma=="+response);
+                        try {
+                            JSONObject jsonObject=new JSONObject(response);
+                            String code_url=jsonObject.getString("code_url");
+                            Bitmap bitmap=QRImageHelper2.createBitmap(code_url,400,400);
+                            iv_saoma.setImageBitmap(bitmap);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (WriterException e) {
+                            e.printStackTrace();
+                        }
 
-//        sendCode(this);
-//        registerUser("86","13631505030");
+                    }
 
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+            }
+        });
+
+        findViewById(R.id.bt_wxsaoma).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PayActivity.this, CaptureActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
+        tv_res=findViewById(R.id.tv_res);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //扫描结果回调
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            String scanResult = bundle.getString(CaptureActivity.INTENT_EXTRA_KEY_QR_SCAN);
+            //将扫描出的信息显示出来
+            tv_res.setText(scanResult);
+            saoMaShouQian(scanResult);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         wxHelp.removePayListener(this);
+    }
+
+    private void saoMaShouQian(String scanResult){
+        List<OkHttpUtils.Param> params=new ArrayList<>();
+        params.add(new OkHttpUtils.Param("auth_code",scanResult));
+        OkHttpUtils.post(MyApplication.serverSystemUrl + "/pay/weixin/erweima", new OkHttpUtils.ResultCallback<String>() {
+            @Override
+            public void onSuccess(String  response) {
+                try {
+                    JSONObject jsonObject=new JSONObject(response);
+                    String result_code=jsonObject.getString("result_code");
+                    String return_code=jsonObject.getString("return_code");
+                    if(result_code.equals("SUCCESS") && return_code.equals("SUCCESS"))
+                        Toast.makeText(PayActivity.this,"扫码成功",Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        },params);
     }
 
     private void zhifubaoPay() {
@@ -131,38 +196,6 @@ public class PayActivity extends Activity implements WXPayListener, AlipayPayLis
                     }
     }
 
-    // 提交用户信息
-//    private void registerUser(String country, String phone) {
-//        Random rnd = new Random();
-//        int id = Math.abs(rnd.nextInt());
-//        String uid = String.valueOf(id);
-//        String nickName = "SmsSDK_User_" + uid;
-//        String avatar = Const.AVATOR_ARR[id % Const.AVATOR_ARR.length];
-//        SMSSDK.submitUserInfo(uid, nickName, avatar, country, phone);
-//    }
-
-//    public void sendCode(Context context) {
-//        RegisterPage page = new RegisterPage();
-//        //如果使用我们的ui，没有申请模板编号的情况下需传null
-//        page.setTempCode(null);
-//        Log.e("xyw","  SMSSDK.getVersion()==>"+ SMSSDK.getVersion() );
-//        page.setRegisterCallback(new EventHandler() {
-//            public void afterEvent(int event, int result, Object data) {
-//                if (result == SMSSDK.RESULT_COMPLETE) {
-//                    // 处理成功的结果
-//                    HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
-//                    String country = (String) phoneMap.get("country"); // 国家代码，如“86”
-//                    String phone = (String) phoneMap.get("phone"); // 手机号码，如“13800138000”
-//                    // TODO 利用国家代码和手机号码进行后续的操作
-//                    Log.e("xyw"," country==>"+country +"--phone==>"+phone );
-//                    registerUser(country,phone);
-//                } else{
-//                    // TODO 处理错误的结果
-//                }
-//            }
-//        });
-//        page.show(context);
-//    }
 
     private class MyHandler extends Handler {
         private final WeakReference<PayActivity> weakReference;

@@ -3,7 +3,7 @@ package com.xunye.zhibott.acitvity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,12 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mob.MobSDK;
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.xunye.zhibott.MyApplication;
 import com.xunye.zhibott.R;
 import com.xunye.zhibott.helper.LogUtil;
+import com.xunye.zhibott.helper.PreferenceUtil;
 import com.xunye.zhibott.helper.RSAEncrypt;
 import com.xyw.util.wxapi.WXHelp;
 import com.xyw.util.wxapi.WXLoginListener;
@@ -72,7 +70,8 @@ public class LoginActivity extends AppCompatActivity implements WXLoginListener 
 
     EventHandler eventHandler;
     Handler mHandler;
-    IWXAPI msgApi;
+
+    PreferenceUtil preferenceUtil;
 
     int delay=30;
     @Override
@@ -82,11 +81,11 @@ public class LoginActivity extends AppCompatActivity implements WXLoginListener 
         ButterKnife.bind(this);
         initEventHandler();
 
-        msgApi = WXAPIFactory.createWXAPI(this, "wxe26cf976f3973f93", false);
+//        msgApi = WXAPIFactory.createWXAPI(this, "wxe26cf976f3973f93", false);
         // 将该app注册到微信
-        msgApi.registerApp("wxe26cf976f3973f93");
+//        msgApi.registerApp("wxe26cf976f3973f93");
 //        weixinLogin();
-
+        preferenceUtil=new PreferenceUtil(this);
         //测试数据
         mEtUsername.setText("xyw");
         mEtPassword.setText("xyw");
@@ -161,6 +160,11 @@ public class LoginActivity extends AppCompatActivity implements WXLoginListener 
             e.printStackTrace();
         }
         params.put("phone", mEtPhone.getText().toString());
+        try {
+            params.put("watchtime", preferenceUtil.getRSAString("watchtime"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         LogUtil.i("登陆"+params.toString());
 //        String url=MyApplication.serverSystemUrl+"/login/usershop";
         String url=MyApplication.serverSystemUrl+"/login/person";
@@ -177,8 +181,10 @@ public class LoginActivity extends AppCompatActivity implements WXLoginListener 
                     JSONObject jsonObject=new JSONObject(response);
                     int status=jsonObject.getInt("status");
                     if(status==200){
-                        startActivity(new Intent(LoginActivity.this,ViewActivity.class));
+                        JSONObject jsonObject1=new JSONObject(jsonObject.getString("result"));
                         MyApplication.username=mEtUsername.getText().toString();
+                        MyApplication.watchtime=jsonObject1.getLong("watchtime");
+                        startActivity(new Intent(LoginActivity.this,ViewActivity.class));
                         mHandler.obtainMessage(1,"登陆成功").sendToTarget();
                         finish();
                     }else if(status==401){
@@ -319,6 +325,10 @@ public class LoginActivity extends AppCompatActivity implements WXLoginListener 
     @Override
     public void success(String openid, String nickname, String headimgurl, String unionid) {
         LogUtil.e("openid="+openid+"\n nickname="+nickname+"\n headimgurl="+headimgurl+"\n unionid="+unionid);
+        preferenceUtil.setPreference("openid",openid);
+        preferenceUtil.setPreference("nickname",nickname);
+        preferenceUtil.setPreference("headimgurl",headimgurl);
+        preferenceUtil.setPreference("unionid",unionid);
         startActivity(new Intent(LoginActivity.this,ViewActivity.class));
         finish();
     }

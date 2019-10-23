@@ -21,13 +21,14 @@ import tv.danmaku.ijk.media.widget.TopvdnApi;
 
 public class MyApplication extends MobApplication {
     public static Context sContext;
-    public static String username;
-//    public static String serverLiveUrl="http://192.168.1.100:8082/live";
-    public static String serverLiveUrl="http://192.168.2.242:8082/live";
-//    public static String serverLiveUrl="http://www.itrontest.top:8082/live";
-//    public static String serverSystemUrl="http://192.168.1.100:8082/system";
-    public static String serverSystemUrl="http://192.168.2.242:8082/system";
-//    public static String serverSystemUrl="http://www.itrontest.top:8082/system";
+    public static String username="";
+    public static long watchtime;
+//    public static String serverLiveUrl="http://192.168.1.106:8090/live";
+//    public static String serverLiveUrl="http://192.168.2.242:8090/live";
+    public static String serverLiveUrl="http://www.itrontest.top:8090/live";
+//    public static String serverSystemUrl="http://192.168.1.106:8090/system";
+//    public static String serverSystemUrl="http://192.168.2.242:8090/system";
+    public static String serverSystemUrl="http://www.itrontest.top:8090/system";
     private ExecutorService executorService= Executors.newSingleThreadExecutor();
     public Future<String> future;
     private Callable<String> callable;

@@ -4,9 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,13 +17,9 @@ import com.iermu.opensdk.ErmuOpenSDK;
 import com.iermu.opensdk.OSLog;
 import com.iermu.opensdk.api.ApiOkClient;
 import com.iermu.opensdk.api.model.ConnectType;
-import com.xunye.zhibott.MainActivity;
 import com.xunye.zhibott.MyApplication;
 import com.xunye.zhibott.R;
-import com.xunye.zhibott.helper.HttpUtil;
 import com.xunye.zhibott.helper.LogUtil;
-import com.xunye.zhibott.helper.PreferenceUtil;
-import com.xunye.zhibott.helper.ToastUtil;
 import com.xunye.zhibott.helper.Utils;
 
 import org.json.JSONArray;
@@ -291,14 +287,14 @@ public class WelcomeActivity extends AppCompatActivity implements EasyPermission
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             LogUtil.e("EasyPermission CallBack onPermissionsDenied() : this " + perms.get(0) + " is denied " +
                     "and never ask again");
-            ToastUtil.showShort(this, "拒绝权限，不再弹出询问框，请前往APP应用设置中打开此权限");
+//            ToastUtil.showShort(this, "拒绝权限，不再弹出询问框，请前往APP应用设置中打开此权限");
             //todo nothing
         }
 
         //无权限，只是单纯被拒绝
         else {
             LogUtil.e("EasyPermission CallBack onPermissionsDenied() : " + perms.get(0) + "request denied");
-            ToastUtil.showShort(this, "拒绝权限，等待下次询问哦");
+//            ToastUtil.showShort(this, "拒绝权限，等待下次询问哦");
             //todo request permission again
         }
 

@@ -22,3 +22,14 @@
 -keep class com.mob.**{*;}
 -keep class cn.smssdk.**{*;}
 -dontwarn com.mob.**
+-dontwarn com.alipay.**
+-dontwarn com.tencent.**
+-dontwarn com.squareup.**
+-dontwarn okio.**
+#-dontwarn okio.**
+
+# 混淆时不使用大小写混合，混淆后的类名为小写
+-dontusemixedcaseclassnames
+
+# 指定不去忽略非公共的库的类
+-dontskipnonpubliclibraryclasses

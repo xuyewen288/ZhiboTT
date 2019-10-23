@@ -83,4 +83,14 @@ public class PreferenceUtil {
         }
         editor.commit();
     }
+
+    public String getRSAString(String key) throws Exception {
+        return mPreferences.getString(key, RSAEncrypt.encrypt("1",RSAEncrypt.PublicKey));
+    }
+
+    public void setRSAString(String key,String value) throws Exception {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(key, RSAEncrypt.encrypt(value,RSAEncrypt.PublicKey));
+        editor.commit();
+    }
 }

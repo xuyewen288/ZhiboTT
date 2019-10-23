@@ -116,6 +116,7 @@
             android:layout_gravity="center"
             android:background="@drawable/button_cicle_shape"
             android:layout_centerHorizontal="true"
+            android:visibility="gone"
             android:text="微信\n登录"/>
 
     </LinearLayout>

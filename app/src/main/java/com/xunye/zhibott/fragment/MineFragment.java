@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +14,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.xunye.zhibott.MyApplication;
 import com.xunye.zhibott.R;
 import com.xunye.zhibott.acitvity.PayActivity;
 import com.xunye.zhibott.helper.GlideUtils;
-import com.xunye.zhibott.wxapi.WXEntryActivity;
+import com.xunye.zhibott.helper.PreferenceUtil;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
@@ -42,6 +43,8 @@ public class MineFragment extends BaseFragment {
     private String mParam2;
 
     private Button mBtPay;
+    private TextView tvWatchTime;
+    private PreferenceUtil preferenceUtil;
 
     public OnFragmentInteractionListener getmListener() {
         return mListener;
@@ -118,12 +121,15 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        preferenceUtil=new PreferenceUtil(getActivity());
         ImageView imageView=view.findViewById(R.id.iv_usericon);
         TextView textView=view.findViewById(R.id.tv_username);
-        Button mBtPay=view.findViewById(R.id.bt_pay);
+        tvWatchTime=view.findViewById(R.id.tv_watchtime);
+        mBtPay=view.findViewById(R.id.bt_pay);
         Platform wechat= ShareSDK.getPlatform(Wechat.NAME);
-        GlideUtils.load(getActivity(),wechat.getDb().getUserIcon(),imageView);
-        textView.setText(wechat.getDb().getUserName());
+        GlideUtils.load(getActivity(),preferenceUtil.getString("headimgurl"),imageView);
+        textView.setText(preferenceUtil.getString("nickname"));
+//        textView.setText(MyApplication.username);
 
         mBtPay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,5 +138,30 @@ public class MineFragment extends BaseFragment {
 //                startActivity(new Intent(getActivity(), WXEntryActivity.class));
             }
         });
+
+        tvWatchTime.setText(secondToTime(MyApplication.watchtime));
+
+    }
+
+
+    /**
+     * 返回日时分秒
+     * @param second
+     * @return
+     */
+    private String secondToTime(long second) {
+        long days = second / 86400;//转换天数
+        second = second % 86400;//剩余秒数
+        long hours = second / 3600;//转换小时数
+        second = second % 3600;//剩余秒数
+        long minutes = second / 60;//转换分钟
+        second = second % 60;//剩余秒数
+        if (0 < days){
+            return days + "天"+hours+"小时"+minutes+"分"+second+"秒";
+        }else if (0 <hours) {
+            return hours+"小时"+minutes+"分"+second+"秒";
+        }else {
+            return minutes+"分"+second+"秒";
+        }
     }
 }

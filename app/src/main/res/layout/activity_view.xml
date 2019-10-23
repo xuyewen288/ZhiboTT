@@ -35,6 +35,7 @@
                 android:gravity="center"
                 android:paddingBottom="20dp"
                 android:paddingTop="20dp"
+                android:visibility="gone"
                 android:text="视频" />
 
             <TextView
@@ -45,6 +46,7 @@
                 android:gravity="center"
                 android:paddingBottom="20dp"
                 android:paddingTop="20dp"
+                android:visibility="gone"
                 android:text="商城" />
 
             <TextView
@@ -55,13 +57,14 @@
                 android:gravity="center"
                 android:paddingBottom="20dp"
                 android:paddingTop="20dp"
+                android:visibility="gone"
                 android:text="我的" />
         </LinearLayout>
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/layout_bottom"></android.support.v4.view.ViewPager>
+            android:layout_above="@id/layout_bottom"></androidx.viewpager.widget.ViewPager>
     </RelativeLayout>
 </FrameLayout>

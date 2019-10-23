@@ -5,25 +5,21 @@ import android.content.Intent;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iermu.opensdk.ErmuOpenSDK;
 import com.iermu.opensdk.OSLog;
 import com.iermu.opensdk.api.ApiOkClient;
-import com.iermu.opensdk.api.model.Connect;
 import com.iermu.opensdk.api.model.ConnectType;
 import com.iermu.opensdk.api.response.CamMetaResponse;
-import com.iermu.opensdk.api.response.LiveMediaResponse;
 import com.iermu.opensdk.api.response.RegisterDevResponse;
-import com.iermu.opensdk.api.response.TokenResponse;
 import com.iermu.opensdk.setup.ISetupDevModule;
 import com.iermu.opensdk.setup.OnApiClientInterceptor;
 import com.iermu.opensdk.setup.OnSetupDevListener;
@@ -38,8 +34,6 @@ import com.tencent.rtmp.TXLivePusher;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 import com.xunye.zhibott.acitvity.CameraActivity;
 import com.xunye.zhibott.acitvity.CmsSetupActivity;
-import com.xunye.zhibott.api.ServerApi;
-import com.xunye.zhibott.helper.PreferenceUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;

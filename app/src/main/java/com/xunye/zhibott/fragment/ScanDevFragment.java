@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +30,23 @@ import com.iermu.opensdk.setup.conn.SetupStatus;
 import com.iermu.opensdk.setup.model.CamDev;
 import com.iermu.opensdk.setup.model.CamDevConf;
 import com.iermu.opensdk.setup.model.ScanStatus;
+import com.xunye.zhibott.MyApplication;
 import com.xunye.zhibott.R;
+import com.xunye.zhibott.helper.HttpUtil;
 import com.xunye.zhibott.helper.SDKHelper;
+import com.xyw.util.helper.LogUtil;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Call;
 
 /**
  * 扫描设备
@@ -68,11 +80,18 @@ public class ScanDevFragment extends Fragment implements View.OnClickListener,Ad
         devListView.setOnItemClickListener(this);
         myAdapter = new MyAdapter();
         devListView.setAdapter(myAdapter);
-
         devModule.scanCam(camdevConf);
         devModule.addSetupDevListener(new OnSetupDevListener() {
+
+            @Override
+            public void onScanWiFi(ScanStatus scanStatus) {
+                super.onScanWiFi(scanStatus);
+                Log.e("xyw","onScanWiFi---"+scanStatus);
+            }
+
             @Override
             public void onScanAuthDev(ScanStatus status) {
+                Log.e("xyw","onScanAuthDev---"+status);
                 super.onScanAuthDev(status);
                 if(getActivity()==null || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && getActivity().isDestroyed())) return;
                 switch (status){
@@ -91,12 +110,14 @@ public class ScanDevFragment extends Fragment implements View.OnClickListener,Ad
             @Override
             public void onScanDev(ScanStatus status) {
                 super.onScanDev(status);
+                Log.e("xyw","onScanDev---"+status);
                 List<CamDev> list = ErmuOpenSDK.newInstance().getSetupDevModule().getScanCamDev();
                 myAdapter.notifyDataSetChanged(list);
             }
             @Override
             public void onSetupStatus(SetupStatus status) {
                 super.onSetupStatus(status);
+                Log.e("xyw","onSetupStatus---"+status);
                 switch (status){
                 case SETUP_ENV_SMART_TIMEOUT:
                     break;
@@ -184,6 +205,7 @@ public class ScanDevFragment extends Fragment implements View.OnClickListener,Ad
         RegisterDevResponse response;
         String devID    = camDev.getDevID();
         int connectType = camDev.getServerConnectType();
+        Log.e("xyw","apiRegisterDevice=="+devID+"---"+connectType);
         try {
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("method", "register");
@@ -197,6 +219,24 @@ public class ScanDevFragment extends Fragment implements View.OnClickListener,Ad
             String relativeUrl  = "/v2/pcs/device";
             String str = okClient.execute(method, relativeUrl, params);
             response = RegisterDevResponse.parseResponse(str);
+
+
+
+            OkHttpUtils.post().url(MyApplication.serverLiveUrl+"/device/register")
+                    .addParams("username",MyApplication.username)
+                    .addParams("deviceid",devID)
+                    .addParams("desc","我的摄像机")
+                    .build().execute(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+
+                }
+
+                @Override
+                public void onResponse(String response, int id) {
+                    LogUtil.e("register result=="+response);
+                }
+            });
         } catch (Exception e) {
             OSLog.e("registerDevice", e);
             response = RegisterDevResponse.parseResponseError(e);
@@ -214,6 +254,7 @@ public class ScanDevFragment extends Fragment implements View.OnClickListener,Ad
     public CamMetaResponse apiCamMeta(CamDev camDev) {
         CamMetaResponse response;
         String devID    = camDev.getDevID();
+        Log.e("xyw","apiCamMeta=="+devID);
         try {
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("method", "meta");
